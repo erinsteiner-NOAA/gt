@@ -165,26 +165,11 @@ fmt_number <- function(data,
     data = data,
     columns = !!columns,
     rows = !!rows,
-    fns = list(
-      html = num_formatter_factory(
-        context = "html",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str),
-      latex = num_formatter_factory(
-        context = "latex",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str),
-      default = num_formatter_factory(
-        context = "default",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str)
-    )
+    fns = num_formatter_factory_multi(
+      contexts = c("html", "latex", "default"),
+      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
+      symbol, drop_trailing_zeros, accounting, incl_space,
+      placement, pattern, format_fn = format_num_to_str)
   )
 }
 
@@ -277,26 +262,11 @@ fmt_scientific <- function(data,
     data = data,
     columns = !!columns,
     rows = !!rows,
-    fns = list(
-      html = num_formatter_factory(
-        context = "html",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str_e),
-      latex = num_formatter_factory(
-        context = "latex",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str_e),
-      default = num_formatter_factory(
-        context = "default",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str_e)
-    )
+    fns = num_formatter_factory_multi(
+      contexts = c("html", "latex", "default"),
+      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
+      symbol, drop_trailing_zeros, accounting, incl_space,
+      placement, pattern, format_fn = format_num_to_str_e)
   )
 }
 
@@ -377,6 +347,7 @@ fmt_percent <- function(data,
   # Use locale-based marks if a locale ID is provided
   sep_mark <- get_locale_sep_mark(locale, sep_mark, use_seps)
   dec_mark <- get_locale_dec_mark(locale, dec_mark)
+
   # Stop function if `locale` does not have a valid value
   validate_locale(locale)
 
@@ -394,26 +365,11 @@ fmt_percent <- function(data,
     data = data,
     columns = !!columns,
     rows = !!rows,
-    fns = list(
-      html = num_formatter_factory(
-        context = "html",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str),
-      latex = num_formatter_factory(
-        context = "latex",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str),
-      default = num_formatter_factory(
-        context = "default",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str)
-    )
+    fns = num_formatter_factory_multi(
+      contexts = c("html", "latex", "default"),
+      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
+      symbol, drop_trailing_zeros, accounting, incl_space,
+      placement, pattern, format_fn = format_num_to_str)
   )
 }
 
@@ -561,26 +517,11 @@ fmt_currency <- function(data,
     data = data,
     columns = !!columns,
     rows = !!rows,
-    fns = list(
-      html = num_formatter_factory(
-        context = "html",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str_c),
-      latex = num_formatter_factory(
-        context = "latex",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str_c),
-      default = num_formatter_factory(
-        context = "default",
-        decimals, suffix_labels, scale_by,
-        sep_mark, dec_mark, symbol, drop_trailing_zeros,
-        accounting, incl_space, placement, pattern,
-        format_fn = format_num_to_str_c)
-    )
+    fns = num_formatter_factory_multi(
+      contexts = c("html", "latex", "default"),
+      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
+      symbol, drop_trailing_zeros, accounting, incl_space,
+      placement, pattern, format_fn = format_num_to_str_c)
   )
 }
 

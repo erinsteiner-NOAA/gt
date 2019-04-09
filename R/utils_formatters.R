@@ -483,6 +483,34 @@ prettify_scientific_notation <- function(x,
     tidy_gsub("-", minus_mark, fixed = TRUE)
 }
 
+num_formatter_factory_multi <- function(contexts = c("html", "latex", "default"),
+                                        decimals,
+                                        suffix_labels,
+                                        scale_by,
+                                        sep_mark,
+                                        dec_mark,
+                                        symbol,
+                                        drop_trailing_zeros,
+                                        accounting,
+                                        incl_space,
+                                        placement,
+                                        pattern,
+                                        format_fn) {
+
+  # Upgrade `contexts` to have names
+  names(contexts) <- contexts
+
+  lapply(contexts, function(x) {
+    num_formatter_factory(
+      context = x,
+      decimals, suffix_labels, scale_by,
+      sep_mark, dec_mark, symbol, drop_trailing_zeros,
+      accounting, incl_space, placement, pattern,
+      format_fn = format_fn
+    )
+  })
+}
+
 #' A factory function used for all numeric `fmt_*()` functions
 #'
 #' @param context The output context.
@@ -573,7 +601,7 @@ num_formatter_factory <- function(context,
       # and also takes on a negative sign
       paste_symbol_str(symbol_str, incl_space, placement, minus_mark) %>%
       # Format values in accounting style
-      format_in_accounting_style(x_vals, accounting, minus_mark, parens_marks) %>%
+      format_as_accounting(x_vals, accounting, minus_mark, parens_marks) %>%
       # If in a LaTeX context, wrap values in math mode
       to_latex_math_mode(context) %>%
       # Handle formatting of pattern
