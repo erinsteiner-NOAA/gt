@@ -196,10 +196,13 @@ scale_x_values <- function(x,
 #' @param format The numeric format for `formatC()`.
 #' @noRd
 format_num_to_str <- function(x,
-                              decimals,
-                              sep_mark,
-                              dec_mark,
-                              drop_trailing_zeros,
+                              decimals = NULL,
+                              sep_mark = NULL,
+                              dec_mark = NULL,
+                              drop_trailing_zeros = NULL,
+                              small_pos = NULL,
+                              exp_marks = NULL,
+                              minus_mark = NULL,
                               format = "f") {
 
   formatC(
@@ -218,10 +221,13 @@ format_num_to_str <- function(x,
 #' @inheritParams format_num_to_str
 #' @noRd
 format_num_to_str_e <- function(x,
-                                decimals,
-                                sep_mark,
-                                dec_mark,
-                                drop_trailing_zeros) {
+                                decimals = NULL,
+                                sep_mark = NULL,
+                                dec_mark = NULL,
+                                drop_trailing_zeros = NULL,
+                                small_pos = NULL,
+                                exp_marks = NULL,
+                                minus_mark = NULL) {
 
   format_num_to_str(
     x,
@@ -229,18 +235,25 @@ format_num_to_str_e <- function(x,
     sep_mark,
     dec_mark,
     format = "e",
-    drop_trailing_zeros)
+    drop_trailing_zeros
+  ) %>%
+    prettify_scientific_notation(small_pos, exp_marks, minus_mark)
 }
+
+
 
 #' A `formatC()` call for `fmt_currency()`
 #'
 #' @inheritParams format_num_to_str
 #' @noRd
 format_num_to_str_c <- function(x,
-                                decimals,
-                                sep_mark,
-                                dec_mark,
-                                drop_trailing_zeros = FALSE) {
+                                decimals = NULL,
+                                sep_mark = NULL,
+                                dec_mark = NULL,
+                                drop_trailing_zeros = NULL,
+                                small_pos = NULL,
+                                exp_marks = NULL,
+                                minus_mark = NULL) {
 
   format_num_to_str(
     x,
@@ -487,10 +500,7 @@ num_formatter_factory_multi <- function(contexts = c("html", "latex", "default")
                                         decimals,
                                         suffix_labels,
                                         scale_by,
-                                        sep_mark,
-                                        dec_mark,
                                         symbol,
-                                        drop_trailing_zeros,
                                         accounting,
                                         incl_space,
                                         placement,
@@ -503,8 +513,7 @@ num_formatter_factory_multi <- function(contexts = c("html", "latex", "default")
   lapply(contexts, function(x) {
     num_formatter_factory(
       context = x,
-      decimals, suffix_labels, scale_by,
-      sep_mark, dec_mark, symbol, drop_trailing_zeros,
+      decimals, suffix_labels, scale_by, symbol,
       accounting, incl_space, placement, pattern,
       format_fn = format_fn
     )
@@ -514,16 +523,12 @@ num_formatter_factory_multi <- function(contexts = c("html", "latex", "default")
 #' A factory function used for all numeric `fmt_*()` functions
 #'
 #' @param context The output context.
-#' @param decimals The number of decimal places (`digits`).
 #' @param suffix_labels Normalized output from the `suffixing` input; either
 #'   provides a character vector of suffix labels, or NULL (the case where the
 #'   `suffixing` input is FALSE).
 #' @param scale_by A numeric scalar.
-#' @param sep_mark The separator for number groups (`big.mark`).
-#' @param dec_mark The decimal separator mark (`decimal.mark`).
 #' @param symbol A symbol, which could be empty (NULL), a percent sign (`%`), or
 #'   a currency symbol.
-#' @param drop_trailing_zeros An option to exclude trailing decimal zeros.
 #' @param accounting An option to use accounting style for currency values.
 #' @param incl_space A logical value indicating whether a single space character
 #'   should separate the symbols and the formatted values.
@@ -537,10 +542,7 @@ num_formatter_factory <- function(context,
                                   decimals,
                                   suffix_labels,
                                   scale_by,
-                                  sep_mark,
-                                  dec_mark,
                                   symbol,
-                                  drop_trailing_zeros,
                                   accounting,
                                   incl_space,
                                   placement,
@@ -550,8 +552,8 @@ num_formatter_factory <- function(context,
   # Force all arguments
   force(
     list(
-      context, decimals, scale_by, sep_mark, dec_mark, symbol,
-      drop_trailing_zeros, accounting, incl_space, placement, pattern
+      context, decimals, suffix_labels, scale_by, symbol, accounting,
+      incl_space, placement
     )
   )
 
@@ -589,11 +591,9 @@ num_formatter_factory <- function(context,
 
     # Apply a series of transformations to `x_str_vals`
     x_str_vals <-
+      x_vals %>%
       # Format all non-NA x values with a formatting function
-      format_fn(x_vals, decimals, sep_mark, dec_mark, drop_trailing_zeros) %>%
-      # Format scientific notation values in a way that
-      # is prettier than the form offered by `formatC()`
-      prettify_scientific_notation(small_pos, exp_marks, minus_mark) %>%
+      format_fn(context, exp_marks) %>%
       # With large-number suffixing support, we paste the
       # vector of suffixes to the right of the `x_str_vals`
       paste_right(suffix_df$suffix) %>%

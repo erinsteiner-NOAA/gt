@@ -167,9 +167,11 @@ fmt_number <- function(data,
     rows = !!rows,
     fns = num_formatter_factory_multi(
       contexts = c("html", "latex", "default"),
-      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
-      symbol, drop_trailing_zeros, accounting, incl_space,
-      placement, pattern, format_fn = format_num_to_str)
+      decimals, suffix_labels, scale_by, symbol, accounting, incl_space,
+      placement, pattern, format_fn = function(x, context) {
+        format_num_to_str(
+          x, decimals, sep_mark, dec_mark, drop_trailing_zeros,
+          exp_marks, minus_mark)})
   )
 }
 
@@ -245,6 +247,7 @@ fmt_scientific <- function(data,
   # Use locale-based marks if a locale ID is provided
   sep_mark <- get_locale_sep_mark(locale, sep_mark, use_seps = TRUE)
   dec_mark <- get_locale_dec_mark(locale, dec_mark)
+
   # Stop function if `locale` does not have a valid value
   validate_locale(locale)
 
@@ -264,9 +267,11 @@ fmt_scientific <- function(data,
     rows = !!rows,
     fns = num_formatter_factory_multi(
       contexts = c("html", "latex", "default"),
-      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
-      symbol, drop_trailing_zeros, accounting, incl_space,
-      placement, pattern, format_fn = format_num_to_str_e)
+      decimals, suffix_labels, scale_by, symbol, accounting, incl_space,
+      placement, pattern, format_fn = function(x, context) {
+        format_num_to_str_e(
+          x, decimals, sep_mark, dec_mark, drop_trailing_zeros,
+          exp_marks, minus_mark)})
   )
 }
 
@@ -367,9 +372,11 @@ fmt_percent <- function(data,
     rows = !!rows,
     fns = num_formatter_factory_multi(
       contexts = c("html", "latex", "default"),
-      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
-      symbol, drop_trailing_zeros, accounting, incl_space,
-      placement, pattern, format_fn = format_num_to_str)
+      decimals, suffix_labels, scale_by, symbol, accounting, incl_space,
+      placement, pattern, format_fn = function(x, context) {
+        format_num_to_str(
+          x, decimals, sep_mark, dec_mark, drop_trailing_zeros,
+          exp_marks, minus_mark)})
   )
 }
 
@@ -494,6 +501,7 @@ fmt_currency <- function(data,
   # Use locale-based marks if a locale ID is provided
   sep_mark <- get_locale_sep_mark(locale, sep_mark, use_seps)
   dec_mark <- get_locale_dec_mark(locale, dec_mark)
+
   # Stop function if `locale` does not have a valid value
   validate_locale(locale)
 
@@ -519,9 +527,11 @@ fmt_currency <- function(data,
     rows = !!rows,
     fns = num_formatter_factory_multi(
       contexts = c("html", "latex", "default"),
-      decimals, suffix_labels, scale_by, sep_mark, dec_mark,
-      symbol, drop_trailing_zeros, accounting, incl_space,
-      placement, pattern, format_fn = format_num_to_str_c)
+      decimals, suffix_labels, scale_by, symbol, accounting, incl_space,
+      placement, pattern, format_fn = function(x, context) {
+        format_num_to_str_c(
+          x, decimals, sep_mark, dec_mark, drop_trailing_zeros,
+          exp_marks, minus_mark)})
   )
 }
 
